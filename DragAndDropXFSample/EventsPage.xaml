@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="DragAndDropXFSample.EventsPage">
+    <ContentPage.Content>
+        <StackLayout Padding="20,40"
+                  BackgroundColor="Black">
+            <Label Text="Hi John"
+                   FontSize="Large"
+                   FontAttributes="Bold"/>
+
+            <Label Text="Your schedule Today"/>
+
+            <Frame BackgroundColor="White"
+                   Margin="0,20,0,0">
+                <StackLayout>
+                <CollectionView ItemsSource="{Binding Events}"
+                                x:Name="EventsCollection">
+                    <CollectionView.EmptyView>
+                        <Label Text="You have no events"
+                               VerticalOptions="CenterAndExpand"/>
+                    </CollectionView.EmptyView>
+                      <CollectionView.ItemsLayout>
+                           <GridItemsLayout Orientation="Vertical"
+                                            HorizontalItemSpacing="10"
+                                            VerticalItemSpacing="10"
+                                            Span="2" />
+                        </CollectionView.ItemsLayout>
+                      <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BackgroundColor="{Binding Color}"
+                                   HasShadow="False"
+                                   Padding="0">
+                                <StackLayout Spacing="10"
+                                             Padding="10,10,10,0">
+                                    <Label Text="{Binding  Time, StringFormat='{0:HH:mm}'}"
+                                           FontAttributes="Bold"
+                                           FontSize="Large"/>
+                                    <Label Text="{Binding  Title}"
+                                           FontSize="15"/>
+                                    <Label Text="{Binding  Location, StringFormat='At {0}'}"
+                                           FontSize="Caption"
+                                           TextColor="White"/>
+
+                                    <StackLayout Orientation="Horizontal"
+                                                 BackgroundColor="#66000000"
+                                                 Padding="5"
+                                                 Margin="-10,0">
+                                        <Image Source="ic_edit"
+                                               HorizontalOptions="EndAndExpand"
+                                               HeightRequest="20"/>
+                                        
+                                        <Label Text="Edit"
+                                               VerticalOptions="Center"
+                                               FontSize="Caption"
+                                               TextColor="White"/>
+                                    </StackLayout>
+                                </StackLayout>
+
+                                 <Frame.GestureRecognizers>
+                                    <DragGestureRecognizer DragStartingCommand="{Binding Path=BindingContext.DragStartingCommand, Source={x:Reference EventsCollection}}"
+                                                           DragStartingCommandParameter="{Binding .}" />
+                                </Frame.GestureRecognizers>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!--#NOTE: Added this extra Layout to fix an issue where the image was disappearing after dropping the card-->
+                <StackLayout>
+                    <Image HeightRequest="30"
+                           WidthRequest="30"
+                           Source="ic_trash"
+                           HorizontalOptions="EndAndExpand"/>
+                     <StackLayout.GestureRecognizers>
+                         <DropGestureRecognizer DropCommand="{Binding DropOverCommand}"/>
+                     </StackLayout.GestureRecognizers>
+              </StackLayout>
+               </StackLayout>
+           </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
